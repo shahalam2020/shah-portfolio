@@ -3,17 +3,6 @@ import { createPortal } from "react-dom";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import "./ScreenshotGallery.css";
 
-/**
- * ScreenshotGallery (3D + live animation version)
- * - Cards: cursor-follow 3D tilt, glare, parallax, floating, scan line
- * - Scroll pe 3D reveal
- * - Click -> lightbox (3D flip transition, tilt, dots)
- * - Esc = band, <- / -> = prev/next, phone pe swipe bhi chalta hai
- *
- * Usage:
- *   <ScreenshotGallery screenshots={project.screenshots} title={project.title} />
- */
-
 const reducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia &&
