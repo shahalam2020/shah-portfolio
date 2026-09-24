@@ -1,9 +1,3 @@
-/* ============================================================
-   ScreenshotGallery — 3D + live animation version
-   Dark navy portfolio theme ke saath match karta hai.
-   Agar tumhare :root mein variables hain to ye unhe use karega,
-   warna neeche wale fallback colors chalenge.
-   ============================================================ */
 
 @property --ang {
   syntax: "<angle>";
