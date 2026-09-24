@@ -9,8 +9,6 @@ const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const TILT_VARS = ["--rx", "--ry", "--mx", "--my", "--px", "--py"];
-
-/** Cursor-follow tilt. CSS vars set karta hai: --rx --ry --mx --my --px --py */
 function useTilt(max = 8) {
   const ref = useRef(null);
 
@@ -37,8 +35,6 @@ function useTilt(max = 8) {
 
   return { ref, onPointerMove, onPointerLeave };
 }
-
-/** Ek baar viewport mein aaye to true */
 function useSeen(ref, threshold = 0.15) {
   const [seen, setSeen] = useState(false);
 

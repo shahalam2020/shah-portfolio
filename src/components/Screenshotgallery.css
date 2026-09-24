@@ -17,9 +17,6 @@
   margin-bottom: 16px;
   padding: 8px 0 12px;
 }
-
-/* ---------- Ambient background (grid + glow blobs) ---------- */
-
 .shots-ambient {
   position: absolute;
   inset: -20px -12px;
@@ -160,8 +157,6 @@
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 22px;
 }
-
-/* wrap = scroll reveal + pointer handlers (ye khud rotate nahi hota) */
 .shot-wrap {
   opacity: 0;
   transform: perspective(900px) translateY(34px) rotateX(14deg) scale(0.96);
