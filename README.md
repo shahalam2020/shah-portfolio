@@ -1,4 +1,4 @@
-# Solox Nobita — 3D Full Stack Developer Portfolio
+# ShahAlam — Full Stack Developer Portfolio
 
 VS Code-ready React + Vite portfolio with a premium dark 3D/glass visual style.
 
