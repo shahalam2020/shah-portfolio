@@ -1,0 +1,36 @@
+rules_version = '2';
+// Paste into Firebase Console → Firestore → Rules.
+// Replace the email below with your admin Google account(s).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && (request.auth.token.email in ['shahalamx2020@gmail.com']
+            || exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    // Public view counter: anyone may read; visitors may only bump views/projectViews by +1.
+    match /stats/portfolio {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['views', 'projectViews', 'updatedAt']);
+      allow update: if isAdmin()
+        || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'projectViews', 'updatedAt']);
+    }
+
+    // Contact form: visitors can create (validated), only admin can read/modify.
+    match /messages/{id} {
+      allow create: if request.resource.data.name is string && request.resource.data.name.size() <= 100
+        && request.resource.data.email is string && request.resource.data.email.size() <= 200
+        && request.resource.data.message is string && request.resource.data.message.size() <= 600
+        && request.resource.data.read == false;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Public content (optional remote mode), admin-only writes.
+    match /{col}/{id} {
+      allow read: if col in ['projects', 'skills', 'settings'];
+      allow write: if isAdmin() && col in ['projects', 'skills', 'settings'];
+    }
+    match /admins/{uid} { allow read: if request.auth != null && request.auth.uid == uid; }
+  }
+}

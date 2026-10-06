@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" class="dark" style="color-scheme: dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>__SITE_TITLE__</title>
+    <meta name="description" content="__SITE_DESCRIPTION__" />
+    <meta name="author" content="__SITE_NAME__" />
+    <meta name="theme-color" content="#050914" />
+    <link rel="canonical" href="__SITE_URL__/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="__SITE_NAME__" />
+    <meta property="og:title" content="__SITE_TITLE__" />
+    <meta property="og:description" content="__SITE_DESCRIPTION__" />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:image" content="__SITE_OG_URL__" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="__SITE_TWITTER__" />
+    <meta name="twitter:title" content="__SITE_TITLE__" />
+    <meta name="twitter:description" content="__SITE_DESCRIPTION__" />
+    <meta name="twitter:image" content="__SITE_OG_URL__" />
+
+    <!-- Apply saved theme before first paint (no flash) -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('portfolio-theme');
+          if (t !== 'light' && t !== 'dark') t = 'dark';
+          var d = document.documentElement;
+          d.classList.toggle('dark', t === 'dark');
+          d.style.colorScheme = t;
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', t === 'dark' ? '#050914' : '#f4f8ff');
+        } catch (e) {}
+      })();
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "__SITE_NAME__",
+        "jobTitle": "__SITE_ROLE__",
+        "url": "__SITE_URL__/",
+        "sameAs": ["__SITE_GITHUB__", "__SITE_LINKEDIN__"]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>This portfolio needs JavaScript to run. You can still reach me at the email on my GitHub profile.</noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

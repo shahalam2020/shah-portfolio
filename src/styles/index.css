@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ───────── Design tokens (RGB triplets so Tailwind can add alpha) ───────── */
+:root {
+  --bg: 244 248 255;
+  --bg-2: 232 240 253;
+  --surface: 255 255 255;
+  --text: 15 23 42;
+  --muted: 71 85 105;
+  --border: 100 116 139;
+  --primary: 8 145 178;
+  --primary-ink: 14 116 144;
+  --secondary: 79 70 229;
+  --accent: 124 58 237;
+  --btn-a: 3 105 161;
+  --btn-b: 79 70 229;
+  --btn-text: 255 255 255;
+  --shadow-card: 0 18px 50px -26px rgb(30 64 175 / 0.35), 0 2px 8px -2px rgb(15 23 42 / 0.06);
+  --grid-line: 15 23 42;
+}
+
+.dark {
+  --bg: 5 9 20;
+  --bg-2: 9 15 32;
+  --surface: 15 23 42;
+  --text: 232 238 250;
+  --muted: 148 163 184;
+  --border: 148 163 184;
+  --primary: 34 211 238;
+  --primary-ink: 34 211 238;
+  --secondary: 99 102 241;
+  --accent: 167 139 250;
+  --btn-a: 34 211 238;
+  --btn-b: 96 165 250;
+  --btn-text: 3 10 24;
+  --shadow-card: 0 24px 60px -28px rgb(0 0 0 / 0.8), inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --grid-line: 255 255 255;
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: rgb(var(--primary) / 0.28); }
+  :focus-visible {
+    outline: 2px solid rgb(var(--primary));
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+  /* custom scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--border) / 0.35); border-radius: 999px; border: 2px solid rgb(var(--bg)); }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--primary) / 0.6); }
+
+  /* smooth colour change when toggling theme */
+  html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+    transition: background-color .45s ease, border-color .45s ease, color .3s ease, fill .3s ease, box-shadow .45s ease !important;
+  }
+}
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10; }
+  .section { @apply relative scroll-mt-24 py-24 sm:py-28; }
+
+  /* Glass surfaces */
+  .glass {
+    @apply border border-line/20 bg-surface/60 shadow-card;
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+  }
+  .dark .glass { @apply bg-surface/50; }
+  .card { @apply glass relative rounded-3xl; }
+
+  /* Animated gradient border that appears on hover */
+  .beam { position: relative; }
+  .beam::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--angle), transparent 0 62%, rgb(var(--primary)) 82%, rgb(var(--accent)) 94%, transparent 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity .4s ease;
+    animation: beam-spin 5s linear infinite;
+    pointer-events: none;
+  }
+  .beam:hover::after, .beam:focus-within::after { opacity: 1; }
+  @keyframes beam-spin { to { --angle: 360deg; } }
+
+  /* Buttons */
+  .btn {
+    @apply relative inline-flex min-h-[46px] select-none items-center justify-center gap-2 overflow-hidden rounded-2xl px-5 py-2.5 text-sm font-semibold transition-[transform,box-shadow,background-color,border-color] duration-300 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-60;
+  }
+  .btn-primary {
+    background-image: linear-gradient(135deg, rgb(var(--btn-a)), rgb(var(--btn-b)));
+    color: rgb(var(--btn-text));
+    box-shadow: 0 10px 30px -10px rgb(var(--btn-a) / 0.7);
+  }
+  .btn-primary:hover { box-shadow: 0 14px 36px -8px rgb(var(--btn-a) / 0.85); transform: translateY(-2px); }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / .35) 50%, transparent 70%);
+    transform: translateX(-120%); transition: transform .7s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(120%); }
+  .btn-ghost { @apply glass text-ink hover:border-primary/50 hover:shadow-glow; }
+  .btn-ghost:hover { transform: translateY(-2px); }
+  .btn-sm { @apply min-h-[38px] rounded-xl px-4 py-2 text-xs; }
+  .icon-btn { @apply glass inline-flex h-11 w-11 items-center justify-center rounded-2xl text-ink transition duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary-ink hover:shadow-glow; }
+
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full border border-line/20 bg-surface/60 px-3 py-1 text-xs font-medium text-muted; }
+  .chip-tech { @apply inline-flex items-center rounded-lg border border-primary/25 bg-primary/10 px-2.5 py-1 font-mono text-[11px] font-medium text-primary-ink; }
+
+  .input {
+    @apply w-full rounded-2xl border border-line/25 bg-bg/60 px-4 py-3 text-sm text-ink placeholder:text-muted/70 transition focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/15;
+  }
+  .input[aria-invalid='true'] { @apply border-red-500/70 focus:ring-red-500/15; }
+
+  .text-gradient {
+    background-image: linear-gradient(120deg, rgb(var(--primary-ink)), rgb(var(--secondary)) 55%, rgb(var(--accent)));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+}
+
+@layer utilities {
+  .preserve-3d { transform-style: preserve-3d; }
+  .perspective { perspective: 1000px; }
+  .backface-hidden { backface-visibility: hidden; }
+  .mask-fade-x { -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .pause-on-hover:hover .marquee-track, .marquee-track:focus-within { animation-play-state: paused; }
+  .skeleton { background: linear-gradient(90deg, rgb(var(--border)/.1) 25%, rgb(var(--border)/.25) 50%, rgb(var(--border)/.1) 75%); background-size: 200% 100%; animation: shimmer 2s linear infinite; }
+}
+
+/* Background grid used by the ambient layer */
+.bg-grid {
+  background-image:
+    linear-gradient(rgb(var(--grid-line) / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--grid-line) / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+/* CSS 3D cube (fallback + reduced motion) */
+.css-cube { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.css-cube .face {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  border: 1px solid rgb(var(--primary) / .55);
+  background: linear-gradient(135deg, rgb(var(--primary) / .18), rgb(var(--accent) / .12));
+  color: rgb(var(--primary-ink));
+  font-family: 'JetBrains Mono Variable', ui-monospace, monospace; font-weight: 700;
+  box-shadow: inset 0 0 28px rgb(var(--primary) / .25), 0 0 24px rgb(var(--primary) / .18);
+  backface-visibility: visible;
+}
+
+/* ───────── Reduced motion ───────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track { animation: none !important; }
+  .marquee-wrap { overflow-x: auto; }
+}
+
+/* Animated gradient frame (profile card, resume card) */
+.spin-border {
+  background: conic-gradient(from var(--angle), rgb(var(--primary)), rgb(var(--secondary)), rgb(var(--accent)), rgb(var(--primary)));
+  animation: spin-border 7s linear infinite;
+}
+@keyframes spin-border { to { --angle: 360deg; } }
